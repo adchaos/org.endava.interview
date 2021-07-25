@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.8.1'
+}
+ext {
+    allureVersion = "2.8.1"
+    junitJupiterVersion = "5.7.1"
+    junitPlatformVersion = "1.7.1"
+}
+group 'org.endava.interview'
+version '1.0-SNAPSHOT'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitJupiterVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${junitJupiterVersion}"
+    testImplementation "org.junit.platform:junit-platform-engine:${junitPlatformVersion}"
+    testImplementation "org.junit.platform:junit-platform-launcher:${junitPlatformVersion}"
+    testImplementation "org.junit.platform:junit-platform-runner:${junitPlatformVersion}"
+    testImplementation "org.junit.platform:junit-platform-commons:${junitPlatformVersion}"
+    testImplementation 'io.rest-assured:rest-assured:4.4.0'
+}
+allure {
+    autoconfigure = true
+    version = "${allureVersion}"  // Latest Allure Version
+
+    aspectjweaver = true
+    aspectjVersion = '1.9.2'
+
+    useJUnit5 {
+        version = '2.12.1' // Latest Allure Version
+    }
+
+}
+tasks.withType(Test) {
+    systemProperties = System.properties
+    useJUnitPlatform() {
+        includeTags System.properties.getProperty('selectIncludedTags', 'positive | negative')
+    }
+}
